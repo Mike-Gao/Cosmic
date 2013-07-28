@@ -1,0 +1,17 @@
+<Canvas>
+    <Kind>42</Kind>
+    <Name>HOMINGSettings</Name>
+    <IsMinified>1</IsMinified>
+    <XPosition>1.000000000</XPosition>
+    <YPosition>383.000000000</YPosition>
+</Canvas>
+<Widget>
+    <Kind>2</Kind>
+    <Name>ACTIVE</Name>
+    <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>LIMIT</Name>
+    <Value>1.182265997</Value>
+</Widget>
