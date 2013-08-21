@@ -1,18 +1,9 @@
-//
-//  CloudsVisualSystemCosmic.cpp
-//
-
 #include "CloudsVisualSystemCosmic.h"
 #include "CloudsRGBDVideoPlayer.h"
 
-//#include "CloudsRGBDVideoPlayer.h"
-//#ifdef AVF_PLAYER
-//#include "ofxAVFVideoPlayer.h"
-//#endif
-
 void CloudsVisualSystemCosmic::setupFloorVbo()
 {
-    int floorSize = debugGridSize*debugGridSize*4;    //4 Verts for every Particle
+    int floorSize = debugGridSize*debugGridSize*4;
     floorIndexSize = debugGridSize*debugGridSize*6;     
     
     ofFloatColor *floorColors = new ofFloatColor[floorSize];
@@ -70,25 +61,26 @@ void CloudsVisualSystemCosmic::setupFloorVbo()
     shadowOpacity = 1.0;
 }
 
+void CloudsVisualSystemCosmic::selfSetupTimeline()
+{
+    timeline->setBPM(120);
+    timeline->setShowBPMGrid(true);
+    timeline->enableSnapToBPM(true);
+    timeline->enableSnapToOtherKeyframes(true);
+    
+    string path = getVisualSystemDataPath()+"audio/moan.wav";
+    ofxTLAudioTrack *at = new ofxTLAudioTrack();
+
+    timeline->addTrack("audio", at);
+    bool loaded = at->loadSoundfile(path);
+    if(!loaded)
+    {
+        loaded = at->loadSoundfile(path);
+    }
+}
+
 void CloudsVisualSystemCosmic::selfSetup()
 {
-    
-    //	if(ofFile::doesFileExist(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov")){
-    //		getRGBDVideoPlayer().setup(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov",
-    //								   getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.xml" );
-    //
-    //		getRGBDVideoPlayer().swapAndPlay();
-    //
-    //		for(int i = 0; i < 640; i += 2){
-    //			for(int j = 0; j < 480; j+=2){
-    //				simplePointcloud.addVertex(ofVec3f(i,j,0));
-    //			}
-    //		}
-    //
-    //		pointcloudShader.load(getVisualSystemDataPath() + "shaders/rgbdcombined");
-    //
-    //	}
-    
     colorPalettes = new ofxColorPalettes();
     colorPalettes->loadFromDirectory(getVisualSystemDataPath()+"colors/");
     
@@ -145,6 +137,9 @@ void CloudsVisualSystemCosmic::selfSetup()
         rad[i + 1] = ofRandom(0.5, 1.0);
         rad[i + 2] = ofRandom(0.5, 1.0);
     }
+    
+    electroFbo.allocate(cols, rows, GL_RGB32F);
+    electroFbo.getTextureReference().setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
     
     radiFbo.allocate(cols, rows, GL_RGB32F);
     radiFbo.getTextureReference().setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
@@ -273,7 +268,6 @@ void CloudsVisualSystemCosmic::selfSetupGuis()
     addAttractorShaderGui("ATTRACTOR5");
 }
 
-//Use system gui for global or logical settings, for exmpl
 void CloudsVisualSystemCosmic::selfSetupSystemGui()
 {
     sysGui->addButton("RESET", false);
@@ -351,30 +345,21 @@ void CloudsVisualSystemCosmic::guiRenderEvent(ofxUIEventArgs &e)
     }
 }
 
-// selfPresetLoaded is called whenever a new preset is triggered
-// it'll be called right before selfBegin() and you may wish to
-// refresh anything that a preset may offset, such as stored colors or particles
 void CloudsVisualSystemCosmic::selfPresetLoaded(string presetPath)
 {
 	
 }
 
-// selfBegin is called when the system is ready to be shown
-// this is a good time to prepare for transitions
-// but try to keep it light weight as to not cause stuttering
 void CloudsVisualSystemCosmic::selfBegin()
 {
 	
 }
 
-//do things like ofRotate/ofTranslate here
-//any type of transformation that doesn't have to do with the camera
 void CloudsVisualSystemCosmic::selfSceneTransformation()
 {
 	
 }
 
-//normal update call
 void CloudsVisualSystemCosmic::selfUpdate()
 {
     time = ofGetElapsedTimef();
@@ -403,49 +388,32 @@ void CloudsVisualSystemCosmic::selfUpdate()
     }
 }
 
-// selfDraw draws in 3D using the default ofEasyCamera
-// you can change the camera by returning getCameraRef()
 void CloudsVisualSystemCosmic::selfDraw()
 {
     drawFloor();
     drawParticles();
-
-
-//	ofPushMatrix();
-//	setupRGBDTransforms();
-//	pointcloudShader.begin();
-//	getRGBDVideoPlayer().setupProjectionUniforms(pointcloudShader);
-//	simplePointcloud.drawVertices();
-//	pointcloudShader.end();
-//	ofPopMatrix();
-	
 }
 
-// draw any debug stuff here
 void CloudsVisualSystemCosmic::selfDrawDebug()
 {
     drawSphereDebug();
     drawAttractorDebug();
 }
 
-// or you can use selfDrawBackground to do 2D drawings that don't use the 3D camera
+
 void CloudsVisualSystemCosmic::selfDrawBackground()
 {
-	//turn the background refresh off
-	//bClearBackground = false;
 	
 }
 
-// this is called when your system is no longer drawing.
-// Right after this selfUpdate() and selfDraw() won't be called any more
 void CloudsVisualSystemCosmic::selfEnd()
 {	
-	simplePointcloud.clear();
+
 }
 
-// this is called when you should clear all the memory and delet anything you made in setup
 void CloudsVisualSystemCosmic::selfExit()
 {
+    vboFloor.clear(); 
 	vbo.clear();
     
     delete[] pos;
@@ -645,7 +613,7 @@ void CloudsVisualSystemCosmic::applySphereShader()
             sphereShader.setUniform1f("radius", *(*rit));
             sphereShader.setUniform1f("limit", *(*lit));
             
-            accFboSrc.draw(0, 0); 
+            accFboSrc.draw(0, 0);
             
             sphereShader.end();
             accFboDst.end();
@@ -1029,10 +997,6 @@ void CloudsVisualSystemCosmic::applyCurlNoiseShader()
     noiseShader.setUniformTexture("velData",
                                   velFboSrc.getTextureReference(),
                                   velFboSrc.getTextureReference().getTextureData().textureID);
-
-//    noiseShader.setUniformTexture("accData",
-//                                 accFboSrc.getTextureReference(),
-//                                 accFboSrc.getTextureReference().getTextureData().textureID);
     
     noiseShader.setUniform1f("noiseScale", noiseScale); 
     noiseShader.setUniform1f("time", time);

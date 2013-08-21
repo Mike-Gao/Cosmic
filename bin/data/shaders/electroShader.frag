@@ -28,15 +28,15 @@ void main()
     		vec2 coord = vec2(i, j);                         
             vec3 otherPos = texture2DRect( posData, coord ).xyz; 
             vec3 direction = otherPos - pos; 
-            float dist = length(direction);
-            if(dist > 0.0001)
-            {
+            float dist = length(direction);            
+            
                 vec3 otherRadi = texture2DRect( radiData,  coord ).xyz;
-                float charge = radi.x*otherRadi.x; 
+                float charge = radi.x*otherRadi.x*dist; 
                 direction = normalize(direction); 
-                dist = dist*dist;                  
-                force += (charge/dist)*direction;             
-            }
+                float rad = dist; 
+                dist = pow(dist, 3.);                  
+                force += (charge*rad/pow((dist+.00001),1.5))*direction;             
+            
         }
     }
     
