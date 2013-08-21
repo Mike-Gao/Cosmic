@@ -9,7 +9,8 @@ varying vec2 texcoord;
 
 void main()
 {   
-	float value = .25+.75*abs(sin((texcoord.x/size)*PI+time)*cos((texcoord.y/size)*PI+time)); 
+	float value = .25+.75*abs(cos((texcoord.x/size)*PI+time)*sin((texcoord.y/size)*PI+time)); 
+
   	gl_FragColor = vec4(value); 
 }
 

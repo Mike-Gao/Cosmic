@@ -68,15 +68,15 @@ void CloudsVisualSystemCosmic::selfSetupTimeline()
     timeline->enableSnapToBPM(true);
     timeline->enableSnapToOtherKeyframes(true);
     
-    string path = getVisualSystemDataPath()+"audio/moan.wav";
-    ofxTLAudioTrack *at = new ofxTLAudioTrack();
-
-    timeline->addTrack("audio", at);
-    bool loaded = at->loadSoundfile(path);
-    if(!loaded)
-    {
-        loaded = at->loadSoundfile(path);
-    }
+//    string path = getVisualSystemDataPath()+"audio/moan.wav";
+//    ofxTLAudioTrack *at = new ofxTLAudioTrack();
+//
+//    timeline->addTrack("audio", at);
+//    bool loaded = at->loadSoundfile(path);
+//    if(!loaded)
+//    {
+//        loaded = at->loadSoundfile(path);
+//    }
 }
 
 void CloudsVisualSystemCosmic::selfSetup()
@@ -484,7 +484,11 @@ void CloudsVisualSystemCosmic::drawSphereDebug()
             ofNoFill();
             float color = 255-bgBri->getPos();
             ofSetColor(color, 25.0*(*(*lit)));
+#if OF_VERSION_MINOR > 7
             ofDrawSphere(*(*pit), *(*rit));
+#else
+            ofSphere(*(*pit), *(*rit));
+#endif
         }
         
         ++bit;
@@ -507,7 +511,11 @@ void CloudsVisualSystemCosmic::drawAttractorDebug()
             ofNoFill();
             float color = 255-bgBri->getPos();
             ofSetColor(color, 25.0*(*(*lit)));
+#if OF_VERSION_MINOR > 7
             ofDrawSphere(*(*pit), *(*lit));
+#else 
+            ofSphere(*(*pit), *(*lit));
+#endif
         }
         
         ++bit;

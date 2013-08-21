@@ -18,6 +18,6 @@ void main()
 	
 	newColor.a *= (1.0 - posZ/size)*shadowOpacity; 
 
-    gl_FragColor = newColor; 
+    gl_FragColor = newColor;     
 }
 
