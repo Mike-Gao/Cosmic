@@ -33,8 +33,10 @@ class CloudsVisualSystemCosmic : public CloudsVisualSystem {
     void selfSceneTransformation();
 	void selfUpdate();
     void selfDraw();
-	void selfDrawRGBD();
+
+    // draw any debug stuff here
 	void selfDrawDebug();
+	
 	void selfDrawBackground();
 	void selfEnd();
     void selfExit();
