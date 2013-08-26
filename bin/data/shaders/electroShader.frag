@@ -34,9 +34,8 @@ void main()
                 float charge = radi.x*otherRadi.x*dist; 
                 direction = normalize(direction); 
                 float rad = dist; 
-                dist = pow(dist, 3.);                  
-                force += (charge*rad/pow((dist+.00001),1.5))*direction;             
-            
+                dist = pow(dist, 2.);                  
+                force += (charge*rad/pow((dist+.01),1.25))*direction;            
         }
     }
     

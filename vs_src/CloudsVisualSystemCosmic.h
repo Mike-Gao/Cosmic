@@ -40,7 +40,8 @@ class CloudsVisualSystemCosmic : public CloudsVisualSystem {
 	void selfDrawBackground();
 	void selfEnd();
     void selfExit();
-
+    
+    void selfKeyPressed(ofKeyEventArgs & args);
 //
 //	ofCamera& getCameraRef(){
 //		return cloudsCamera;
