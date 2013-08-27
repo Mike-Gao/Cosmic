@@ -2,9 +2,10 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	ofSetVerticalSync(true);
+//	ofSetVerticalSync(true);
 	//ofSetFrameRate(24);
 	
+    ofSetFullscreen(true); 
 	visualSystem.setup();
 	visualSystem.playSystem();
 }

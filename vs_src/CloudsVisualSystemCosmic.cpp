@@ -248,24 +248,20 @@ void CloudsVisualSystemCosmic::selfSetup()
 
 void CloudsVisualSystemCosmic::selfSetupGuis()
 {
-    setupFboViewerGui("HOME", &homeFbo);
-    setupFboViewerGui("RADI", &radiFbo);
-    setupFboViewerGui("POSITION", &posFboSrc);
-    setupFboViewerGui("VELOCITY", &velFboDst);
-    setupFboViewerGui("ACCELERATION", &accFboSrc);
+//    setupFboViewerGui("HOME", &homeFbo);
+//    setupFboViewerGui("RADI", &radiFbo);
+//    setupFboViewerGui("POSITION", &posFboSrc);
+//    setupFboViewerGui("VELOCITY", &velFboDst);
+//    setupFboViewerGui("ACCELERATION", &accFboSrc);
     
-    addSphereShaderGui("SPHERE0");
-    addSphereShaderGui("SPHERE1");
-    addHomeShaderGui("HOMING");
-    addElectroShaderGui("ELECTRO");
-    addCurlNoiseShaderGui("CURL NOISE");
+    addSphereShaderGui("SPH0");
+    addSphereShaderGui("SPH1");
+    addHomeShaderGui("HMG");
+    addElectroShaderGui("ELE");
     
-    addAttractorShaderGui("ATTRACTOR0");
-    addAttractorShaderGui("ATTRACTOR1");
-    addAttractorShaderGui("ATTRACTOR2");
-    addAttractorShaderGui("ATTRACTOR3");
-    addAttractorShaderGui("ATTRACTOR4");
-    addAttractorShaderGui("ATTRACTOR5");
+    addAttractorShaderGui("ART0");
+    addAttractorShaderGui("ART1");
+    addAttractorShaderGui("ART2");
 }
 
 void CloudsVisualSystemCosmic::selfSetupSystemGui()
@@ -462,8 +458,29 @@ void CloudsVisualSystemCosmic::selfExit()
     attractorExpPower.clear();
     attractorAccLimit.clear();
     attractorPosition.clear();
+    
+    delete colorPalettes;
 }
 
+void CloudsVisualSystemCosmic::selfKeyPressed(ofKeyEventArgs & args)
+{
+    switch (args.key)
+    {
+        case 'A':
+        {
+            if(tlGui != NULL)
+            {
+                ofxUIToggle *t = (ofxUIToggle *) tlGui->getWidget("ANIMATE");
+                t->setValue(!t->getValue());
+                t->triggerSelf();
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
 
 int CloudsVisualSystemCosmic::ID(int x, int y)
 {
@@ -853,19 +870,20 @@ void CloudsVisualSystemCosmic::addSphereShaderGui(string name)
     g->setName(name+"Settings");
     g->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
-    ofxUIToggle *toggle = g->addToggle("ACTIVE", active);
+    ofxUIToggle *toggle = g->addToggle(name + " ACTIVE", active);
     toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     g->resetPlacer();
     g->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     g->addWidgetToHeader(toggle);
     g->addSpacer();
     
-    g->add2DPad("POS-XY", ofVec3f(-debugGridSize*2.0, debugGridSize*2.0), ofVec3f(-debugGridSize*2.0, debugGridSize*2.0), pos);
-    g->addSlider("POS-Z", -debugGridSize*2.0, debugGridSize*2.0, &pos->z);
+    g->addMinimalSlider(name + " POS-X", -debugGridSize*2.0, debugGridSize*2.0, &pos->x);
+    g->addMinimalSlider(name + " POS-Y", -debugGridSize*2.0, debugGridSize*2.0, &pos->y);
+    g->addMinimalSlider(name + " POS-Z", -debugGridSize*2.0, debugGridSize*2.0, &pos->z);
     g->addSpacer();
     
-    g->addSlider("RADIUS", 0, debugGridSize*2.0, radius);
-    g->addSlider("LIMIT", 0.0, 10.0, limit);
+    g->addSlider(name + " RADIUS", 0, debugGridSize*2.0, radius);
+    g->addSlider(name + " LIMIT", 0.0, 10.0, limit);
     
     g->autoSizeToFitWidgets();
     addGui(g);
@@ -880,14 +898,14 @@ void CloudsVisualSystemCosmic::addHomeShaderGui(string name)
     g->setName(name+"Settings");
     g->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
-    ofxUIToggle *toggle = g->addToggle("ACTIVE", &bHomingActive);
+    ofxUIToggle *toggle = g->addToggle(name + " ACTIVE", &bHomingActive);
     toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     g->resetPlacer();
     g->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     g->addWidgetToHeader(toggle);
     g->addSpacer();
     
-    g->addSlider("LIMIT", 0.0, 10.0, &homeForceLimit);
+    g->addSlider(name + " LIMIT", 0.0, 10.0, &homeForceLimit);
     
     g->autoSizeToFitWidgets();
     addGui(g);
@@ -902,14 +920,14 @@ void CloudsVisualSystemCosmic::addElectroShaderGui(string name)
     g->setName(name+"Settings");
     g->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
-    ofxUIToggle *toggle = g->addToggle("ACTIVE", &bElectroActive);
+    ofxUIToggle *toggle = g->addToggle(name + " ACTIVE", &bElectroActive);
     toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     g->resetPlacer();
     g->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     g->addWidgetToHeader(toggle);
     g->addSpacer();
     
-    g->addSlider("LIMIT", 0.0, 10.0, &electroForceLimit);
+    g->addSlider(name + " LIMIT", 0.0, 10.0, &electroForceLimit);
     
     g->autoSizeToFitWidgets();
     addGui(g);
@@ -938,19 +956,20 @@ void CloudsVisualSystemCosmic::addAttractorShaderGui(string name)
     g->setName(name+"Settings");
     g->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
-    ofxUIToggle *toggle = g->addToggle("ACTIVE", active);
+    ofxUIToggle *toggle = g->addToggle(name + " ACTIVE", active);
     toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     g->resetPlacer();
     g->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     g->addWidgetToHeader(toggle);
     g->addSpacer();
     
-    g->add2DPad("POS-XY", ofVec3f(-debugGridSize*2.0, debugGridSize*2.0), ofVec3f(-debugGridSize*2.0, debugGridSize*2.0), pos);
-    g->addSlider("POS-Z", -debugGridSize*2.0, debugGridSize*2.0, &pos->z);
+    g->addMinimalSlider(name + " POS-X", -debugGridSize*2.0, debugGridSize*2.0, &pos->x);
+    g->addMinimalSlider(name + " POS-Y", -debugGridSize*2.0, debugGridSize*2.0, &pos->y);
+    g->addMinimalSlider(name + " POS-Z", -debugGridSize*2.0, debugGridSize*2.0, &pos->z);
     g->addSpacer();
-    g->addSlider("POWER", -1.0, 1.0, power);
-    g->addSlider("EXPFACTOR", 0.0, 1.0, expFactor);
-    g->addSlider("LIMIT", 0.0, 10.0, limit);
+    g->addSlider(name + " POWER", -1.0, 1.0, power);
+    g->addSlider(name + " EXPFACTOR", 0.0, 1.0, expFactor);
+    g->addSlider(name + " LIMIT", 0.0, 10.0, limit);
     g->autoSizeToFitWidgets();
     addGui(g);
 }
@@ -978,15 +997,15 @@ void CloudsVisualSystemCosmic::addCurlNoiseShaderGui(string name)
     g->setName(name+"Settings");
     g->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
-    ofxUIToggle *toggle = g->addToggle("ACTIVE", &bNoiseActive);
+    ofxUIToggle *toggle = g->addToggle(name + " ACTIVE", &bNoiseActive);
     toggle->setLabelPosition(OFX_UI_WIDGET_POSITION_LEFT);
     g->resetPlacer();
     g->addWidgetDown(toggle, OFX_UI_ALIGN_RIGHT, true);
     g->addWidgetToHeader(toggle);
     g->addSpacer();
     
-    g->addSlider("NOISE SCALE", 0.0, .1, &noiseScale); 
-    g->addSlider("LIMIT", 0.0, 10.0, &noiseForceLimit);
+    g->addSlider(name + " NOISE SCALE", 0.0, .1, &noiseScale);
+    g->addSlider(name + " LIMIT", 0.0, 10.0, &noiseForceLimit);
     
     g->autoSizeToFitWidgets();
     addGui(g);
