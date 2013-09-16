@@ -103,6 +103,10 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		E72FF12917E696150007780D /* electroShader.frag in Sources */ = {isa = PBXBuildFile; fileRef = E72FF12717E696150007780D /* electroShader.frag */; };
+		E72FF12A17E696150007780D /* electroShader.vert in Sources */ = {isa = PBXBuildFile; fileRef = E72FF12817E696150007780D /* electroShader.vert */; };
+		E72FF12D17E698490007780D /* attractorShader.frag in Sources */ = {isa = PBXBuildFile; fileRef = E72FF12B17E698490007780D /* attractorShader.frag */; };
+		E72FF12E17E698490007780D /* attractorShader.vert in Sources */ = {isa = PBXBuildFile; fileRef = E72FF12C17E698490007780D /* attractorShader.vert */; };
 		E761F4D81622CA3D00029E43 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E761F4D71622CA3D00029E43 /* Accelerate.framework */; };
 		E7D26E5817A2E63A00652876 /* CloudsRGBDVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7D26E5617A2E63A00652876 /* CloudsRGBDVideoPlayer.cpp */; };
 		E7D26E5C17A2F0CF00652876 /* CloudsRGBDCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7D26E5A17A2F0CF00652876 /* CloudsRGBDCamera.cpp */; };
@@ -409,6 +413,10 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E72FF12717E696150007780D /* electroShader.frag */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = electroShader.frag; sourceTree = "<group>"; };
+		E72FF12817E696150007780D /* electroShader.vert */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = electroShader.vert; sourceTree = "<group>"; };
+		E72FF12B17E698490007780D /* attractorShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = attractorShader.frag; sourceTree = "<group>"; };
+		E72FF12C17E698490007780D /* attractorShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = attractorShader.vert; sourceTree = "<group>"; };
 		E761F4D71622CA3D00029E43 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		E7D26E5617A2E63A00652876 /* CloudsRGBDVideoPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CloudsRGBDVideoPlayer.cpp; sourceTree = "<group>"; };
 		E7D26E5717A2E63A00652876 /* CloudsRGBDVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudsRGBDVideoPlayer.h; sourceTree = "<group>"; };
@@ -1133,6 +1141,10 @@
 		E7D26E5F17A31C0D00652876 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				E72FF12B17E698490007780D /* attractorShader.frag */,
+				E72FF12C17E698490007780D /* attractorShader.vert */,
+				E72FF12717E696150007780D /* electroShader.frag */,
+				E72FF12817E696150007780D /* electroShader.vert */,
 				E7D26E6017A31C0D00652876 /* rgbdcombined.frag */,
 				E7D26E6117A31C0D00652876 /* rgbdcombined.vert */,
 			);
@@ -1304,6 +1316,10 @@
 				E7D26E6217A31C0D00652876 /* rgbdcombined.frag in Sources */,
 				E7D26E6317A31C0D00652876 /* rgbdcombined.vert in Sources */,
 				4611CCF217A4164B00ACFC45 /* ofxAutoReloadedShader.cpp in Sources */,
+				E72FF12917E696150007780D /* electroShader.frag in Sources */,
+				E72FF12A17E696150007780D /* electroShader.vert in Sources */,
+				E72FF12D17E698490007780D /* attractorShader.frag in Sources */,
+				E72FF12E17E698490007780D /* attractorShader.vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
