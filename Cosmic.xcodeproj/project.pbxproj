@@ -1487,6 +1487,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PREBINDING = NO;
 				PRODUCT_NAME = CosmicDebug;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1592,6 +1593,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PREBINDING = NO;
 				PRODUCT_NAME = Cosmic;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
