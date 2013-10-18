@@ -9,7 +9,7 @@ uniform float resolution;
 uniform float limit; 
 
 varying vec2 texcoord;	
-
+const float epsilon = 1e-6;
 void main()
 {    
 	vec3 pos =  texture2DRect( posData,  texcoord ).xyz;    
@@ -24,22 +24,26 @@ void main()
     for(i = 0.0; i < resolution; i++)
     {
         for(j = 0.0; j < resolution; j++)
-        {   
-    		vec2 coord = vec2(i, j);                         
-            vec3 otherPos = texture2DRect( posData, coord ).xyz; 
-            vec3 direction = otherPos - pos; 
-            float dist = length(direction);            
-            
-                vec3 otherRadi = texture2DRect( radiData,  coord ).xyz;
-                float charge = radi.x*otherRadi.x*dist; 
-                direction = normalize(direction); 
-                float rad = dist; 
-                dist = pow(dist, 2.);                  
-                force += (charge*rad/pow((dist+.01),1.25))*direction;            
+        {
+			
+    		vec2 coord = vec2(i, j);
+			vec3 otherPos = texture2DRect( posData, coord ).xyz;
+			vec3 direction = otherPos - pos;
+			float dist = length( direction );
+			
+			if(dist > epsilon){
+				vec3 otherRadi = texture2DRect( radiData,  coord ).xyz;
+				float charge = radi.x*otherRadi.x*dist; 
+				direction = normalize(direction); 
+				float rad = dist; 
+				dist = pow(dist, 2.);
+				force += (charge*rad / max(pow( (dist+.01),1.25), epsilon)) * direction;
+			}
         }
     }
     
-	float m = length(force); 
+	
+	float m = length(force);
 	if(m > limit)
 	{
 		force = normalize(force)*limit; 
